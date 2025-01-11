@@ -1,0 +1,16 @@
+{
+  "configurations": [
+    {
+      "name": "Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      // "runtimeExecutable": "${execPath}", // no need this ?
+      "args": [
+        "${workspaceFolder}/test",
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--disable-extensions"
+      ],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"] // for debug ts
+    }
+  ]
+}
