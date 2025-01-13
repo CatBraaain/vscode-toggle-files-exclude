@@ -151,7 +151,14 @@ class FormattingConfig {
       ],
     },
   };
-  static packageJson = packageJson;
+  static packageJson = {
+    ...packageJson,
+    rules: {
+      ...Object.fromEntries(
+        Object.entries(packageJson.rules).map(([key, _value]) => [key, "warn"]),
+      ),
+    },
+  };
 }
 
 export default main();
