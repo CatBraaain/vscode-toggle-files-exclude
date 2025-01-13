@@ -2,10 +2,10 @@
   "name": "toggle-files-exclude",
   "displayName": "Toggle Files Exclude",
   "version": "0.0.1",
-  "description": "description",
+  "description": "Quickly toggles `files.exclude`",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Example/Example"
+    "url": "https://github.com/CatBraaain/vscode-toggle-files-exclude"
   },
   "license": "MIT",
   "publisher": "CatBraaain",
