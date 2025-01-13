@@ -114,7 +114,9 @@ class FormattingConfig {
   static autoFixRules = {
     files: ["**/*.{ts,cts,mts,tsx}", "**/*.{js,cjs,mjs,jsx}"],
     rules: {
+      "spaced-comment": ["warn"],
       "@typescript-eslint/consistent-type-imports": ["warn"],
+      "@typescript-eslint/no-wrapper-object-types": ["warn"],
     },
   };
   static preferNodeProtocol = {
