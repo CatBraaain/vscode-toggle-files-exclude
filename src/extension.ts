@@ -1,7 +1,7 @@
 import vscode from "vscode";
 
-import { helloWorld } from "./commands";
+import { toggleFilesExclude } from "./commands";
 
 export function activate(context) {
-  vscode.commands.registerCommand("boilertemplate.helloWorld", helloWorld);
+  vscode.commands.registerCommand("toggle-files-exclude.toggleFilesExclude", toggleFilesExclude);
 }
