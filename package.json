@@ -1,6 +1,6 @@
 {
-  "name": "boilertemplate",
-  "displayName": "displayName",
+  "name": "toggle-files-exclude",
+  "displayName": "Toggle Files Exclude",
   "version": "0.0.1",
   "description": "description",
   "repository": {
