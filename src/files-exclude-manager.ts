@@ -1,18 +1,10 @@
-﻿import merge from "merge";
+import merge from "merge";
 import vscode from "vscode";
 
 const SECTION = "files.exclude";
 
 export class FilesExcludeManager {
-  public configScopeObjs: ConfigScope[];
-  public toggleDirection: boolean;
-
-  public constructor() {
-    this.configScopeObjs = this.getConfigScopeObjs();
-    this.toggleDirection = this.getIsAllFalse(this.configScopeObjs);
-  }
-
-  private getConfigScopeObjs(): ConfigScope[] {
+  private static get configScopeObjs(): ConfigScope[] {
     const filesExcludeConfigInfo = vscode.workspace.getConfiguration().inspect(SECTION);
     const globalValue = filesExcludeConfigInfo?.globalValue ?? {};
     const workspaceValue = filesExcludeConfigInfo?.workspaceValue ?? {};
@@ -25,18 +17,18 @@ export class FilesExcludeManager {
     ];
   }
 
-  private getIsAllFalse(configScopeObjs: ConfigScope[]) {
-    const activeConfig = merge(...configScopeObjs.map(({ config }) => config));
+  private static get togglingDirection() {
+    const activeConfig = merge(...FilesExcludeManager.configScopeObjs.map(({ config }) => config));
     return Object.values(activeConfig).every((value) => value === false);
   }
 
-  public toggleFilesExclude() {
-    this.configScopeObjs.forEach(({ config, scope }) =>
-      this.toggleFilesExcludeByScope(config, this.toggleDirection, scope),
+  public static toggleConfig() {
+    FilesExcludeManager.configScopeObjs.forEach(({ config, scope }) =>
+      FilesExcludeManager.toggleConfigByScope(config, FilesExcludeManager.togglingDirection, scope),
     );
   }
 
-  private toggleFilesExcludeByScope(
+  private static toggleConfigByScope(
     config: object,
     toggleDirection: boolean,
     configurationTarget: vscode.ConfigurationTarget,

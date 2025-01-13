@@ -1,9 +1,12 @@
 import vscode from "vscode";
 
-import { toggleFilesExclude } from "./commands";
+import { FilesExcludeManager } from "./files-exclude-manager";
 
 export function activate(context) {
   context.subscriptions.push(
-    vscode.commands.registerCommand("toggle-files-exclude.toggleFilesExclude", toggleFilesExclude),
+    vscode.commands.registerCommand(
+      "toggle-files-exclude.toggleFilesExclude",
+      FilesExcludeManager.toggleConfig,
+    ),
   );
 }
