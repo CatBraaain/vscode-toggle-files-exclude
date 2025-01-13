@@ -1,4 +1,4 @@
-import merge from "merge";
+﻿import merge from "merge";
 import vscode from "vscode";
 
 const SECTION = "files.exclude";
@@ -20,6 +20,10 @@ export class FilesExcludeManager {
   private static get togglingDirection() {
     const activeConfig = merge(...FilesExcludeManager.configScopeObjs.map(({ config }) => config));
     return Object.values(activeConfig).every((value) => value === false);
+  }
+
+  public static get icon() {
+    return FilesExcludeManager.togglingDirection ? "$(eye)" : "$(eye-closed)";
   }
 
   public static toggleConfig() {
