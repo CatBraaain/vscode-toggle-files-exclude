@@ -6,32 +6,28 @@ import alloy from "eslint-config-alloy/base.js";
 import alloyts from "eslint-config-alloy/typescript.js";
 import importPlugin from "eslint-plugin-import";
 import noAutoFix from "eslint-plugin-no-autofix";
-import packageJson from "eslint-plugin-package-json/configs/recommended";
 import unicorn from "eslint-plugin-unicorn";
+import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
 function main() {
   const setting = Object.values(SettingConfig).flat();
+  const main = Object.values(MainConfig).flat();
   const linting = Object.values(LintingConfig)
     .flat()
-    .map((config) => fixable(config, "block"));
-  const formatting = Object.values(FormattingConfig)
-    .flat()
-    .map((config) => fixable(config, "force"));
-  return tseslint.config(...setting, ...linting, ...formatting);
+    .map((config) => unfixable(config));
+  return tseslint.config(...setting, ...main, ...linting);
 }
 
-function fixable(config, mode) {
+function unfixable(config) {
   if (!config.rules) {
     return config;
   }
-  const shouldBlock = mode === "block";
-  const shouldForce = mode === "force";
   const newRules = Object.fromEntries(
     Object.entries(config.rules).flatMap(([key, value]) => [
-      [`noAutoFix/` + key, shouldBlock ? value : "off"],
-      [key, shouldForce ? value : "off"],
+      [key, "off"],
+      [`noAutoFix/` + key, value],
     ]),
   );
   return {
@@ -48,33 +44,20 @@ class SettingConfig {
   static ignore = [includeIgnoreFile(path.resolve(import.meta.dirname, ".gitignore"))];
 }
 
-class LintingConfig {
+class MainConfig {
   static js = [eslint.configs.recommended, { rules: alloy.rules }];
   static ts = [
     tseslint.configs.strictTypeChecked,
     tseslint.configs.stylisticTypeChecked,
     { rules: alloyts.rules },
-  ]
-    .flat()
-    .map((config) => ({
-      ...config,
-      files: [
-        // applying to ts files is for linting ts
-        // applying to js files is for overriding rules duplicate between js and ts
-        // applying to other files (json,html,etc) cause error when loading rules
-        "**/*.{ts,cts,mts,tsx}",
-        "**/*.{js,cjs,mjs,jsx}",
-      ],
-    }));
+  ];
+
   static typecheckRulesSettings = [
     // Linting with Type Information https://typescript-eslint.io/getting-started/typed-linting/
     {
       languageOptions: {
         parserOptions: {
-          projectService: {
-            // add files outscoped from tsconfig
-            allowDefaultProject: ["*.*ts", "*.*js"],
-          },
+          projectService: true,
           tsconfigRootDir: import.meta.dirname,
         },
         globals: {
@@ -98,27 +81,15 @@ class LintingConfig {
       "@typescript-eslint/no-unused-expressions": "off",
     },
   };
-  static tuning = [
-    {
-      rules: {
-        "max-params": ["off", { max: 3 }],
-        "@typescript-eslint/no-unused-vars": ["off"],
-        "@typescript-eslint/member-ordering": ["off"],
-        "@typescript-eslint/dot-notation": ["off"],
-      },
-    },
-  ];
-}
-
-class FormattingConfig {
-  static autoFixRules = {
-    files: ["**/*.{ts,cts,mts,tsx}", "**/*.{js,cjs,mjs,jsx}"],
+  static tuning = {
     rules: {
-      "spaced-comment": ["warn"],
-      "@typescript-eslint/consistent-type-imports": ["warn"],
-      "@typescript-eslint/no-wrapper-object-types": ["warn"],
+      "max-params": ["off", { max: 3 }],
+      "@typescript-eslint/no-unused-vars": ["off"],
+      "@typescript-eslint/member-ordering": ["off"],
+      "@typescript-eslint/dot-notation": ["off"],
     },
   };
+
   static preferNodeProtocol = {
     languageOptions: {
       globals: globals.builtin,
@@ -149,16 +120,30 @@ class FormattingConfig {
             order: "asc",
             orderImportKind: "desc",
           },
+          groups: ["builtin", "external", ["internal", "parent", "sibling"], "index", "object"],
         },
       ],
     },
+    settings: {
+      "import/parsers": {
+        "@typescript-eslint/parser": [".ts", ".tsx"],
+      },
+      "import/resolver": {
+        typescript: {
+          project: ["**/tsconfig.json"],
+        },
+      },
+    },
   };
-  static packageJson = {
-    ...packageJson,
+}
+
+class LintingConfig {
+  static unusedImports = {
+    plugins: {
+      unusedImports,
+    },
     rules: {
-      ...Object.fromEntries(
-        Object.entries(packageJson.rules).map(([key, _value]) => [key, "warn"]),
-      ),
+      "unused-imports/no-unused-imports": ["warn"],
     },
   };
 }
