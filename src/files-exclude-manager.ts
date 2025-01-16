@@ -1,4 +1,4 @@
-﻿import merge from "merge";
+﻿import merge from "deepmerge";
 import vscode from "vscode";
 
 const SECTION = "files.exclude";
@@ -18,7 +18,7 @@ export class FilesExcludeManager {
   }
 
   private static get togglingDirection() {
-    const activeConfig = merge(...FilesExcludeManager.configScopeObjs.map(({ config }) => config));
+    const activeConfig = merge.all(FilesExcludeManager.configScopeObjs.map(({ config }) => config));
     return Object.values(activeConfig).every((value) => value === false);
   }
 
