@@ -34,12 +34,12 @@ export class FilesExcludeManager {
 
   private static toggleConfigByScope(
     config: object,
-    toggleDirection: boolean,
+    togglingDirection: boolean,
     configurationTarget: vscode.ConfigurationTarget,
   ) {
     const configKeys = Object.keys(config);
     if (configKeys.length !== 0) {
-      const toggledConfig = Object.fromEntries(configKeys.map((key) => [key, toggleDirection]));
+      const toggledConfig = Object.fromEntries(configKeys.map((key) => [key, togglingDirection]));
       vscode.workspace.getConfiguration().update(SECTION, toggledConfig, configurationTarget);
     }
   }
