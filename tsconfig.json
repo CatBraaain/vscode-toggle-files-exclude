@@ -4,7 +4,7 @@
     "moduleResolution": "bundler", // bundler: bundler, NodeNext: node.js or using commonjs package
     "target": "ESNext",
     "lib": ["ESNext"],
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "dist",
     "allowJs": true,
     "esModuleInterop": true, // ensures compatibility between ESModule and CommonJS modules.
@@ -18,6 +18,6 @@
     "sourceMap": true, // generates corresponding '.map' files for debugging
     "strict": true // enables all strict type-checking options
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "*.*ts", "*.*js"],
   "exclude": ["node_modules"]
 }
