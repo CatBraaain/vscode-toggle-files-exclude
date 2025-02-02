@@ -4,5 +4,4 @@ node_modules
 src
 
 eslint.config.mjs
-prettier.config.mjs
 tsconfig.json
