@@ -1,4 +1,4 @@
-import nodeExternals from "rollup-plugin-node-externals";
+﻿import nodeExternals from "rollup-plugin-node-externals";
 import { defineConfig } from "vite";
 import type { LibraryFormats } from "vite";
 
@@ -12,7 +12,6 @@ export default defineConfig(() => {
           moduleSideEffects: false,
         },
       },
-      // emptyOutDir: false,
       lib: {
         entry: "src/extension.ts",
         formats: ["cjs"] satisfies LibraryFormats[],
