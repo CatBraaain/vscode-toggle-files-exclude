@@ -9,4 +9,11 @@ export function activate(context) {
       FilesExcludeManager.toggleConfig,
     ),
   );
+
+  // for explorer icon
+  context.subscriptions.push(
+    FilesExcludeManager.watchConfiguration(),
+    vscode.commands.registerCommand("toggle-files-exclude.show", FilesExcludeManager.show),
+    vscode.commands.registerCommand("toggle-files-exclude.hide", FilesExcludeManager.hide),
+  );
 }

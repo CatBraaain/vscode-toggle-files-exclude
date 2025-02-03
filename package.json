@@ -21,8 +21,32 @@
       {
         "command": "toggle-files-exclude.toggleFilesExclude",
         "title": "Toggle Files Exclude: Toggle Files Exclude"
+      },
+      {
+        "command": "toggle-files-exclude.hide",
+        "title": "Toggle Files Exclude: Hide",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "toggle-files-exclude.show",
+        "title": "Toggle Files Exclude: Show",
+        "icon": "$(eye-closed)"
       }
-    ]
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "toggle-files-exclude.show",
+          "group": "navigation@0",
+          "when": "view == 'workbench.explorer.fileView' && toggleFilesExclude.isExcluded"
+        },
+        {
+          "command": "toggle-files-exclude.hide",
+          "group": "navigation@0",
+          "when": "view == 'workbench.explorer.fileView' && !toggleFilesExclude.isExcluded"
+        }
+      ]
+    }
   },
   "activationEvents": [
     "onStartupFinished"

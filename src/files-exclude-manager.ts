@@ -2,6 +2,7 @@
 import vscode from "vscode";
 
 const SECTION = "files.exclude";
+const CONTEXT_KEY = "toggleFilesExclude.isExcluded";
 
 export class FilesExcludeManager {
   private static get isExcluded() {
@@ -22,10 +23,31 @@ export class FilesExcludeManager {
     ];
   }
 
-  public static toggleConfig() {
+  public static watchConfiguration() {
+    vscode.commands.executeCommand("setContext", CONTEXT_KEY, FilesExcludeManager.isExcluded);
+    return vscode.workspace.onDidChangeConfiguration((event) => {
+      if (event.affectsConfiguration(SECTION)) {
+        vscode.commands.executeCommand("setContext", CONTEXT_KEY, FilesExcludeManager.isExcluded);
+      }
+    });
+  }
+
+  public static toggleConfig(direction: boolean | null = null) {
     FilesExcludeManager.configScopeObjs.forEach(({ config, scope }) =>
-      FilesExcludeManager.toggleConfigByScope(config, !FilesExcludeManager.isExcluded, scope),
+      FilesExcludeManager.toggleConfigByScope(
+        config,
+        direction ?? !FilesExcludeManager.isExcluded,
+        scope,
+      ),
     );
+  }
+
+  public static show() {
+    FilesExcludeManager.toggleConfig(false);
+  }
+
+  public static hide() {
+    FilesExcludeManager.toggleConfig(true);
   }
 
   private static toggleConfigByScope(
