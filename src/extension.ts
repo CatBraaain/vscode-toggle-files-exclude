@@ -9,15 +9,4 @@ export function activate(context) {
       FilesExcludeManager.toggleConfig,
     ),
   );
-
-  const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right);
-  statusBarItem.text = FilesExcludeManager.icon;
-  statusBarItem.command = "toggle-files-exclude.toggleFilesExclude";
-  statusBarItem.tooltip = "Toggle Files Exclude";
-  statusBarItem.show();
-  context.subscriptions.push(statusBarItem);
-
-  vscode.workspace.onDidChangeConfiguration((event) => {
-    statusBarItem.text = FilesExcludeManager.icon;
-  });
 }

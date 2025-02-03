@@ -22,10 +22,6 @@ export class FilesExcludeManager {
     ];
   }
 
-  public static get icon() {
-    return !FilesExcludeManager.isExcluded ? "$(eye)" : "$(eye-closed)";
-  }
-
   public static toggleConfig() {
     FilesExcludeManager.configScopeObjs.forEach(({ config, scope }) =>
       FilesExcludeManager.toggleConfigByScope(config, !FilesExcludeManager.isExcluded, scope),
