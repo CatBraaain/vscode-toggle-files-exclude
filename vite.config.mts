@@ -1,13 +1,13 @@
-﻿import nodeExternals from "rollup-plugin-node-externals";
+import nodeExternals from "rollup-plugin-node-externals";
 import { defineConfig } from "vite";
 import type { LibraryFormats } from "vite";
 
 export default defineConfig(() => {
   return {
+    plugins: [nodeExternals()],
     build: {
       rollupOptions: {
         external: ["vscode"],
-        plugins: [nodeExternals()],
         treeshake: {
           moduleSideEffects: false,
         },
