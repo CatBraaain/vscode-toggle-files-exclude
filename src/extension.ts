@@ -10,14 +10,10 @@ export function activate(context) {
     ),
   );
 
-  const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right);
-  statusBarItem.text = FilesExcludeManager.icon;
-  statusBarItem.command = "toggle-files-exclude.toggleFilesExclude";
-  statusBarItem.tooltip = "Toggle Files Exclude";
-  statusBarItem.show();
-  context.subscriptions.push(statusBarItem);
-
-  vscode.workspace.onDidChangeConfiguration((event) => {
-    statusBarItem.text = FilesExcludeManager.icon;
-  });
+  // for explorer icon
+  context.subscriptions.push(
+    FilesExcludeManager.watchConfiguration(),
+    vscode.commands.registerCommand("toggle-files-exclude.show", FilesExcludeManager.show),
+    vscode.commands.registerCommand("toggle-files-exclude.hide", FilesExcludeManager.hide),
+  );
 }

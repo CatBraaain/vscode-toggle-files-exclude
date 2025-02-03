@@ -2,8 +2,14 @@
 import vscode from "vscode";
 
 const SECTION = "files.exclude";
+const CONTEXT_KEY = "toggleFilesExclude.isExcluded";
 
 export class FilesExcludeManager {
+  private static get isExcluded() {
+    const activeConfig = merge.all(FilesExcludeManager.configScopeObjs.map(({ config }) => config));
+    return Object.values(activeConfig).every((value) => value === true);
+  }
+
   private static get configScopeObjs(): ConfigScope[] {
     const filesExcludeConfigInfo = vscode.workspace.getConfiguration().inspect(SECTION);
     const globalValue = filesExcludeConfigInfo?.globalValue ?? {};
@@ -17,19 +23,31 @@ export class FilesExcludeManager {
     ];
   }
 
-  private static get togglingDirection() {
-    const activeConfig = merge.all(FilesExcludeManager.configScopeObjs.map(({ config }) => config));
-    return Object.values(activeConfig).every((value) => value === false);
+  public static watchConfiguration() {
+    vscode.commands.executeCommand("setContext", CONTEXT_KEY, FilesExcludeManager.isExcluded);
+    return vscode.workspace.onDidChangeConfiguration((event) => {
+      if (event.affectsConfiguration(SECTION)) {
+        vscode.commands.executeCommand("setContext", CONTEXT_KEY, FilesExcludeManager.isExcluded);
+      }
+    });
   }
 
-  public static get icon() {
-    return FilesExcludeManager.togglingDirection ? "$(eye)" : "$(eye-closed)";
-  }
-
-  public static toggleConfig() {
+  public static toggleConfig(direction: boolean | null = null) {
     FilesExcludeManager.configScopeObjs.forEach(({ config, scope }) =>
-      FilesExcludeManager.toggleConfigByScope(config, FilesExcludeManager.togglingDirection, scope),
+      FilesExcludeManager.toggleConfigByScope(
+        config,
+        direction ?? !FilesExcludeManager.isExcluded,
+        scope,
+      ),
     );
+  }
+
+  public static show() {
+    FilesExcludeManager.toggleConfig(false);
+  }
+
+  public static hide() {
+    FilesExcludeManager.toggleConfig(true);
   }
 
   private static toggleConfigByScope(
