@@ -6,11 +6,11 @@ const CONTEXT_KEY = "toggleFilesExclude.isExcluded";
 
 export class FilesExcludeManager {
   private static get isExcluded() {
-    const activeConfig = merge.all(FilesExcludeManager.configScopeObjs.map(({ config }) => config));
+    const activeConfig = merge.all(FilesExcludeManager.configScopes.map(({ config }) => config));
     return Object.values(activeConfig).every((value) => value === true);
   }
 
-  private static get configScopeObjs(): ConfigScope[] {
+  private static get configScopes(): ConfigScope[] {
     const filesExcludeConfigInfo = vscode.workspace.getConfiguration().inspect(SECTION);
     const globalValue = filesExcludeConfigInfo?.globalValue ?? {};
     const workspaceValue = filesExcludeConfigInfo?.workspaceValue ?? {};
@@ -33,7 +33,7 @@ export class FilesExcludeManager {
   }
 
   public static toggleConfig(direction: boolean | null = null) {
-    FilesExcludeManager.configScopeObjs.forEach(({ config, scope }) =>
+    FilesExcludeManager.configScopes.forEach(({ config, scope }) =>
       FilesExcludeManager.toggleConfigByScope(
         config,
         direction ?? !FilesExcludeManager.isExcluded,
