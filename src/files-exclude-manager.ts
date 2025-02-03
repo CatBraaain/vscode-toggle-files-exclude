@@ -4,6 +4,11 @@ import vscode from "vscode";
 const SECTION = "files.exclude";
 
 export class FilesExcludeManager {
+  private static get isExcluded() {
+    const activeConfig = merge.all(FilesExcludeManager.configScopeObjs.map(({ config }) => config));
+    return Object.values(activeConfig).every((value) => value === true);
+  }
+
   private static get configScopeObjs(): ConfigScope[] {
     const filesExcludeConfigInfo = vscode.workspace.getConfiguration().inspect(SECTION);
     const globalValue = filesExcludeConfigInfo?.globalValue ?? {};
@@ -17,18 +22,13 @@ export class FilesExcludeManager {
     ];
   }
 
-  private static get togglingDirection() {
-    const activeConfig = merge.all(FilesExcludeManager.configScopeObjs.map(({ config }) => config));
-    return Object.values(activeConfig).every((value) => value === false);
-  }
-
   public static get icon() {
-    return FilesExcludeManager.togglingDirection ? "$(eye)" : "$(eye-closed)";
+    return !FilesExcludeManager.isExcluded ? "$(eye)" : "$(eye-closed)";
   }
 
   public static toggleConfig() {
     FilesExcludeManager.configScopeObjs.forEach(({ config, scope }) =>
-      FilesExcludeManager.toggleConfigByScope(config, FilesExcludeManager.togglingDirection, scope),
+      FilesExcludeManager.toggleConfigByScope(config, !FilesExcludeManager.isExcluded, scope),
     );
   }
 
