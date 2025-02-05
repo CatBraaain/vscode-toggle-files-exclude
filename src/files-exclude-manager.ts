@@ -1,4 +1,4 @@
-import merge from "deepmerge";
+﻿import merge from "deepmerge";
 import vscode from "vscode";
 
 const SECTION = "files.exclude";
@@ -6,6 +6,8 @@ const CONTEXT_KEY = "toggleFilesExclude.isExcluded";
 
 export class FilesExcludeManager {
   private static get isExcluded() {
+    // avoid vscode.workspace.getConfiguration().get(SECTION) to exclude default settings
+    // https://code.visualstudio.com/api/references/vscode-api#WorkspaceConfiguration
     const mergedUserConfig = merge.all(
       FilesExcludeManager.configScopes.map(({ config }) => config),
     );
