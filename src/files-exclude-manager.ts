@@ -1,4 +1,4 @@
-﻿import merge from "deepmerge";
+import merge from "deepmerge";
 import vscode from "vscode";
 
 const SECTION = "files.exclude";
@@ -6,8 +6,10 @@ const CONTEXT_KEY = "toggleFilesExclude.isExcluded";
 
 export class FilesExcludeManager {
   private static get isExcluded() {
-    const activeConfig = merge.all(FilesExcludeManager.configScopes.map(({ config }) => config));
-    return Object.values(activeConfig).every((value) => value === true);
+    const mergedUserConfig = merge.all(
+      FilesExcludeManager.configScopes.map(({ config }) => config),
+    );
+    return Object.values(mergedUserConfig).every((value) => value === true);
   }
 
   private static get configScopes(): ConfigScope[] {
