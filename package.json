@@ -2,7 +2,7 @@
   "name": "toggle-files-exclude",
   "displayName": "Toggle Files Exclude",
   "version": "0.0.1",
-  "description": "Quickly toggles `files.exclude`",
+  "description": "Instantly toggle `files.exclude` settings with one click",
   "repository": {
     "type": "git",
     "url": "https://github.com/CatBraaain/vscode-toggle-files-exclude"
