@@ -4,7 +4,7 @@ import type { LibraryFormats } from "vite";
 
 export default defineConfig(() => {
   return {
-    plugins: [nodeExternals()],
+    plugins: [nodeExternals({ builtins: true, deps: false })],
     build: {
       rollupOptions: {
         external: ["vscode"],
